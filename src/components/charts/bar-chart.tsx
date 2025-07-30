@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
   Bar,
   CartesianGrid,
@@ -13,6 +12,7 @@ import {
 } from "recharts";
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart-wrapper";
+import { useChartColors } from "@/hooks/use-chart-colors";
 
 type BarChartProps = {
   data: any[];
@@ -36,6 +36,7 @@ export function BarChart({
   showGrid = true,
   colors,
 }: BarChartProps) {
+  const chartColors = useChartColors();
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;
@@ -59,35 +60,35 @@ export function BarChart({
     <ChartContainer height={height} className={className}>
       <ResponsiveContainer width="100%" height="100%">
         <RechartsBarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            {showGrid && (
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--border))"
-                opacity={0.3}
-              />
-            )}
-            <XAxis
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+          {showGrid && (
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={chartColors.gridColor}
+              opacity={0.3}
             />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-              tickFormatter={formatValue}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar
-              dataKey={dataKey}
-              radius={[4, 4, 0, 0]}
-              fill={color}
-            >
-              {colors && data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-              ))}
-            </Bar>
+          )}
+          <XAxis
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+            tickFormatter={formatValue}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Bar
+            dataKey={dataKey}
+            radius={[4, 4, 0, 0]}
+            fill={color}
+          >
+            {colors && data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+            ))}
+          </Bar>
         </RechartsBarChart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -105,6 +106,7 @@ export function HorizontalBarChart({
   showGrid = true,
   colors,
 }: BarChartProps) {
+  const chartColors = useChartColors();
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;
@@ -132,38 +134,38 @@ export function HorizontalBarChart({
           data={data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
-            {showGrid && (
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--border))"
-                opacity={0.3}
-              />
-            )}
-            <XAxis
-              type="number"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-              tickFormatter={formatValue}
+          {showGrid && (
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={chartColors.gridColor}
+              opacity={0.3}
             />
-            <YAxis
-              type="category"
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-              width={80}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar
-              dataKey={dataKey}
-              radius={[0, 4, 4, 0]}
-              fill={color}
-            >
-              {colors && data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-              ))}
-            </Bar>
+          )}
+          <XAxis
+            type="number"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+            tickFormatter={formatValue}
+          />
+          <YAxis
+            type="category"
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+            width={80}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Bar
+            dataKey={dataKey}
+            radius={[0, 4, 4, 0]}
+            fill={color}
+          >
+            {colors && data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+            ))}
+          </Bar>
         </RechartsBarChart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -192,6 +194,7 @@ export function StackedBarChart({
   className,
   showGrid = true,
 }: StackedBarChartProps) {
+  const chartColors = useChartColors();
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;
@@ -215,35 +218,35 @@ export function StackedBarChart({
     <ChartContainer height={height} className={className}>
       <ResponsiveContainer width="100%" height="100%">
         <RechartsBarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            {showGrid && (
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--border))"
-                opacity={0.3}
-              />
-            )}
-            <XAxis
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+          {showGrid && (
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={chartColors.gridColor}
+              opacity={0.3}
             />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-              tickFormatter={formatValue}
+          )}
+          <XAxis
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+            tickFormatter={formatValue}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          {bars.map(bar => (
+            <Bar
+              key={bar.dataKey}
+              dataKey={bar.dataKey}
+              stackId="stack"
+              fill={bar.color}
+              radius={[2, 2, 0, 0]}
             />
-            <Tooltip content={<CustomTooltip />} />
-            {bars.map(bar => (
-              <Bar
-                key={bar.dataKey}
-                dataKey={bar.dataKey}
-                stackId="stack"
-                fill={bar.color}
-                radius={[2, 2, 0, 0]}
-              />
-            ))}
+          ))}
         </RechartsBarChart>
       </ResponsiveContainer>
     </ChartContainer>

@@ -42,7 +42,6 @@ export function PieChart({
   showLegend = true,
   innerRadius = 0,
   outerRadius = 80,
-  animate = true,
 }: PieChartProps) {
   const formatValue = (value: number) => {
     if (value >= 1000000) {
@@ -101,23 +100,23 @@ export function PieChart({
       <ChartContainer height={height}>
         <ResponsiveContainer width="100%" height="100%">
           <RechartsPieChart>
-              <Pie
-                data={dataWithPercentage}
-                cx="50%"
-                cy="50%"
-                innerRadius={innerRadius}
-                outerRadius={outerRadius}
-                paddingAngle={2}
-                dataKey={dataKey}
-                nameKey={nameKey}
-              >
-                {dataWithPercentage.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={colors[index % colors.length]}
-                  />
-                ))}
-              </Pie>
+            <Pie
+              data={dataWithPercentage}
+              cx="50%"
+              cy="50%"
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
+              paddingAngle={2}
+              dataKey={dataKey}
+              nameKey={nameKey}
+            >
+              {dataWithPercentage.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colors[index % colors.length]}
+                />
+              ))}
+            </Pie>
             <Tooltip content={<CustomTooltip />} />
           </RechartsPieChart>
         </ResponsiveContainer>
@@ -209,25 +208,25 @@ export function SemiCircleChart({
       <ChartContainer height={height}>
         <ResponsiveContainer width="100%" height="100%">
           <RechartsPieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="80%"
-                startAngle={180}
-                endAngle={0}
-                innerRadius={60}
-                outerRadius={100}
-                paddingAngle={2}
-                dataKey={dataKey}
-                nameKey={nameKey}
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={colors[index % colors.length]}
-                  />
-                ))}
-              </Pie>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="80%"
+              startAngle={180}
+              endAngle={0}
+              innerRadius={60}
+              outerRadius={100}
+              paddingAngle={2}
+              dataKey={dataKey}
+              nameKey={nameKey}
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colors[index % colors.length]}
+                />
+              ))}
+            </Pie>
             <Tooltip content={<CustomTooltip />} />
           </RechartsPieChart>
         </ResponsiveContainer>

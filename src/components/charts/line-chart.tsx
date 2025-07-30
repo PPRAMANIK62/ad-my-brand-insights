@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Area,
   AreaChart,
@@ -14,6 +13,7 @@ import {
 } from "recharts";
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart-wrapper";
+import { useChartColors } from "@/hooks/use-chart-colors";
 
 type LineChartProps = {
   data: any[];
@@ -40,8 +40,8 @@ export function LineChart({
   showArea = false,
   strokeWidth = 2,
   dot = false,
-  animate = true,
 }: LineChartProps) {
+  const chartColors = useChartColors();
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `$${(value / 1000000).toFixed(1)}M`;
@@ -67,56 +67,56 @@ export function LineChart({
     <ChartContainer height={height} className={className}>
       <ResponsiveContainer width="100%" height="100%">
         <ChartComponent data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            {showGrid && (
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--border))"
-                opacity={0.3}
-              />
-            )}
-            <XAxis
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+          {showGrid && (
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={chartColors.gridColor}
+              opacity={0.3}
             />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-              tickFormatter={formatValue}
-            />
-            <Tooltip content={<CustomTooltip />} />
+          )}
+          <XAxis
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+            tickFormatter={formatValue}
+          />
+          <Tooltip content={<CustomTooltip />} />
 
-            {showArea
-              ? (
-                  <>
-                    <defs>
-                      <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={color} stopOpacity={0.3} />
-                        <stop offset="95%" stopColor={color} stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <Area
-                      type="monotone"
-                      dataKey={dataKey}
-                      stroke={color}
-                      strokeWidth={strokeWidth}
-                      fill="url(#colorGradient)"
-                      dot={dot}
-                    />
-                  </>
-                )
-              : (
-                  <Line
+          {showArea
+            ? (
+                <>
+                  <defs>
+                    <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={color} stopOpacity={0.3} />
+                      <stop offset="95%" stopColor={color} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <Area
                     type="monotone"
                     dataKey={dataKey}
                     stroke={color}
                     strokeWidth={strokeWidth}
+                    fill="url(#colorGradient)"
                     dot={dot}
-                    activeDot={{ r: 4, fill: color }}
                   />
-                )}
+                </>
+              )
+            : (
+                <Line
+                  type="monotone"
+                  dataKey={dataKey}
+                  stroke={color}
+                  strokeWidth={strokeWidth}
+                  dot={dot}
+                  activeDot={{ r: 4, fill: color }}
+                />
+              )}
         </ChartComponent>
       </ResponsiveContainer>
     </ChartContainer>
@@ -147,6 +147,7 @@ export function MultiLineChart({
   showGrid = true,
   showArea = false,
 }: MultiLineChartProps) {
+  const chartColors = useChartColors();
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;
@@ -172,52 +173,52 @@ export function MultiLineChart({
     <ChartContainer height={height} className={className}>
       <ResponsiveContainer width="100%" height="100%">
         <ChartComponent data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            {showGrid && (
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--border))"
-                opacity={0.3}
-              />
-            )}
-            <XAxis
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+          {showGrid && (
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke={chartColors.gridColor}
+              opacity={0.3}
             />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-              tickFormatter={formatValue}
-            />
-            <Tooltip content={<CustomTooltip />} />
+          )}
+          <XAxis
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: chartColors.textColor }}
+            tickFormatter={formatValue}
+          />
+          <Tooltip content={<CustomTooltip />} />
 
-            {lines.map((line, index) => (
-              showArea
-                ? (
-                    <Area
-                      key={line.dataKey}
-                      type="monotone"
-                      dataKey={line.dataKey}
-                      stackId={index}
-                      stroke={line.color}
-                      fill={line.color}
-                      fillOpacity={0.3}
-                    />
-                  )
-                : (
-                    <Line
-                      key={line.dataKey}
-                      type="monotone"
-                      dataKey={line.dataKey}
-                      stroke={line.color}
-                      strokeWidth={2}
-                      dot={false}
-                      activeDot={{ r: 4, fill: line.color }}
-                    />
-                  )
-            ))}
+          {lines.map((line, index) => (
+            showArea
+              ? (
+                  <Area
+                    key={line.dataKey}
+                    type="monotone"
+                    dataKey={line.dataKey}
+                    stackId={index}
+                    stroke={line.color}
+                    fill={line.color}
+                    fillOpacity={0.3}
+                  />
+                )
+              : (
+                  <Line
+                    key={line.dataKey}
+                    type="monotone"
+                    dataKey={line.dataKey}
+                    stroke={line.color}
+                    strokeWidth={2}
+                    dot={false}
+                    activeDot={{ r: 4, fill: line.color }}
+                  />
+                )
+          ))}
         </ChartComponent>
       </ResponsiveContainer>
     </ChartContainer>

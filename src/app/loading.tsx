@@ -42,7 +42,7 @@ export default function Loading() {
                 <Skeleton className="h-4 w-20" />
               </motion.div>
             ))}
-            
+
             <div className="pt-4 border-t border-border">
               {Array.from({ length: 3 }).map((_, i) => (
                 <motion.div

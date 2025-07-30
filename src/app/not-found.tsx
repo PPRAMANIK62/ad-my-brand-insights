@@ -48,7 +48,7 @@ export default function NotFound() {
               transition={{ delay: 0.4 }}
               className="text-muted-foreground text-sm leading-relaxed"
             >
-              The page you're looking for doesn't exist or has been moved. 
+              The page you're looking for doesn't exist or has been moved.
               Please check the URL or navigate back to the dashboard.
             </motion.p>
 
@@ -65,8 +65,8 @@ export default function NotFound() {
                   Go Home
                 </Link>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => window.history.back()}
                 className="flex-1"
               >
@@ -85,8 +85,8 @@ export default function NotFound() {
               <p className="text-xs text-muted-foreground mb-3">
                 Still having trouble?
               </p>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => window.location.reload()}
                 className="text-xs"
