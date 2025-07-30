@@ -71,11 +71,59 @@ export type LoadingState = {
 
 // Chart data types
 export type ChartDataPoint = {
-  [key: string]: string | number;
+  date: string;
+  value: number;
+  label?: string;
+};
+
+// Analytics data types
+export type MetricCard = {
+  id: string;
+  title: string;
+  value: string | number;
+  change: number;
+  changeType: "increase" | "decrease";
+  icon: string;
+  description: string;
+};
+
+export type RevenueData = {
+  revenue: number;
+  profit: number;
+  expenses: number;
+} & ChartDataPoint;
+
+export type UserData = {
+  users: number;
+  newUsers: number;
+  returningUsers: number;
+} & ChartDataPoint;
+
+export type ConversionData = {
+  channel: string;
+  conversions: number;
+  rate: number;
+  revenue: number;
+  color: string;
+};
+
+export type TableRow = {
+  id: string;
+  campaign: string;
+  channel: string;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  revenue: number;
+  ctr: number;
+  conversionRate: number;
+  roas: number;
+  status: "active" | "paused" | "completed";
+  dateCreated: string;
 };
 
 export type ChartProps = {
-  data: ChartDataPoint[];
+  data: any[]; // More flexible for different chart data types
   config?: ChartConfig;
   height?: number;
   className?: string;
