@@ -23,9 +23,9 @@ Build a modern, visually stunning analytics dashboard for "ADmyBRAND Insights" -
 ### ⚡ Technical Implementation
 
 - **React/Next.js** (preferably Next.js 14+ with App Router)
-- **Modern UI Library** - Use shadcn/ui, MUI, Chakra UI, or similar
-- **Mock Data Integration** - Create realistic sample data or use a public API
-- **Component Architecture** - Build reusable components (Card, Chart, Table, etc.)
+- **Modern UI Library** - Use shadcn/ui (already installed)
+- **Mock Data Integration** - Create realistic sample data
+- **Component Architecture** - Build reusable customized animated components (Card, Chart, Table, etc.) with smooth transitions on top of shadcn components
 
 ## Bonus Features
 
