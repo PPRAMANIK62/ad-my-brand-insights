@@ -1,4 +1,5 @@
-import { format, isAfter, isBefore, isEqual, parseISO, subDays, startOfDay, endOfDay } from "date-fns";
+import { endOfDay, format, isAfter, isBefore, isEqual, parseISO, startOfDay, subDays } from "date-fns";
+
 import type { DateRange } from "@/lib/types";
 
 /**
@@ -6,7 +7,6 @@ import type { DateRange } from "@/lib/types";
  */
 export function getPresetDateRange(preset: string): DateRange {
   const today = new Date();
-  const startOfToday = startOfDay(today);
   const endOfToday = endOfDay(today);
 
   switch (preset) {
@@ -42,15 +42,16 @@ export function getPresetDateRange(preset: string): DateRange {
  * Check if a date is within a date range
  */
 export function isDateInRange(date: Date, dateRange: DateRange): boolean {
-  if (!dateRange.from || !dateRange.to) return true;
+  if (!dateRange.from || !dateRange.to)
+    return true;
 
   const targetDate = startOfDay(date);
   const fromDate = startOfDay(dateRange.from);
   const toDate = endOfDay(dateRange.to);
 
   return (
-    (isEqual(targetDate, fromDate) || isAfter(targetDate, fromDate)) &&
-    (isEqual(targetDate, toDate) || isBefore(targetDate, toDate))
+    (isEqual(targetDate, fromDate) || isAfter(targetDate, fromDate))
+    && (isEqual(targetDate, toDate) || isBefore(targetDate, toDate))
   );
 }
 
@@ -59,14 +60,14 @@ export function isDateInRange(date: Date, dateRange: DateRange): boolean {
  */
 export function parseDate(dateString: string): Date {
   // Handle "MMM dd" format (e.g., "Jan 15")
-  if (/^[A-Za-z]{3}\s\d{1,2}$/.test(dateString)) {
+  if (/^[A-Z]{3}\s\d{1,2}$/i.test(dateString)) {
     const currentYear = new Date().getFullYear();
     const fullDateString = `${dateString}, ${currentYear}`;
     return new Date(fullDateString);
   }
 
   // Handle ISO date strings
-  if (dateString.includes('T') || dateString.includes('-')) {
+  if (dateString.includes("T") || dateString.includes("-")) {
     return parseISO(dateString);
   }
 
@@ -79,15 +80,17 @@ export function parseDate(dateString: string): Date {
  */
 export function filterTimeSeriesData<T extends { date: string }>(
   data: T[],
-  dateRange: DateRange
+  dateRange: DateRange,
 ): T[] {
-  if (!dateRange.from || !dateRange.to) return data;
+  if (!dateRange.from || !dateRange.to)
+    return data;
 
-  return data.filter(item => {
+  return data.filter((item) => {
     try {
       const itemDate = parseDate(item.date);
       return isDateInRange(itemDate, dateRange);
-    } catch (error) {
+    }
+    catch (error) {
       console.warn(`Failed to parse date: ${item.date}`, error);
       return false;
     }
@@ -100,15 +103,17 @@ export function filterTimeSeriesData<T extends { date: string }>(
 export function filterTableData<T extends Record<string, any>>(
   data: T[],
   dateRange: DateRange,
-  dateField: keyof T = 'dateCreated'
+  dateField: keyof T = "dateCreated",
 ): T[] {
-  if (!dateRange.from || !dateRange.to) return data;
+  if (!dateRange.from || !dateRange.to)
+    return data;
 
-  return data.filter(item => {
+  return data.filter((item) => {
     try {
       const itemDate = parseDate(item[dateField] as string);
       return isDateInRange(itemDate, dateRange);
-    } catch (error) {
+    }
+    catch (error) {
       console.warn(`Failed to parse date: ${item[dateField]}`, error);
       return false;
     }
@@ -130,19 +135,24 @@ export function calculateMetricsFromData(data: any[]): {
 
   // Calculate totals based on data type
   const revenue = data.reduce((sum, item) => {
-    if (typeof item.revenue === 'number') return sum + item.revenue;
-    if (typeof item.value === 'number') return sum + item.value;
+    if (typeof item.revenue === "number")
+      return sum + item.revenue;
+    if (typeof item.value === "number")
+      return sum + item.value;
     return sum;
   }, 0);
 
   const users = data.reduce((sum, item) => {
-    if (typeof item.users === 'number') return sum + item.users;
-    if (typeof item.value === 'number') return sum + item.value;
+    if (typeof item.users === "number")
+      return sum + item.users;
+    if (typeof item.value === "number")
+      return sum + item.value;
     return sum;
   }, 0);
 
   const conversions = data.reduce((sum, item) => {
-    if (typeof item.conversions === 'number') return sum + item.conversions;
+    if (typeof item.conversions === "number")
+      return sum + item.conversions;
     return sum;
   }, 0);
 
@@ -158,11 +168,12 @@ export function calculateMetricsFromData(data: any[]): {
  * Format date range for display
  */
 export function formatDateRange(dateRange: DateRange): string {
-  if (!dateRange.from) return "Select date range";
-  
+  if (!dateRange.from)
+    return "Select date range";
+
   if (!dateRange.to) {
     return format(dateRange.from, "MMM dd, yyyy");
   }
-  
+
   return `${format(dateRange.from, "MMM dd, yyyy")} - ${format(dateRange.to, "MMM dd, yyyy")}`;
 }
