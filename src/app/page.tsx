@@ -1,104 +1,191 @@
-import Image from "next/image";
+"use client";
+
+import { Calendar, Download, RefreshCw } from "lucide-react";
+
+import { BarChart } from "@/components/charts/bar-chart";
+import { LineChart, MultiLineChart } from "@/components/charts/line-chart";
+import { DonutChart } from "@/components/charts/pie-chart";
+import { DashboardContainer, DashboardLayout, DashboardSection } from "@/components/layout/dashboard-layout";
+import { PageHeader } from "@/components/layout/header";
+import { CampaignsTable } from "@/components/tables/campaigns-table";
+import { Button } from "@/components/ui/button";
+import { ChartWrapper } from "@/components/ui/chart-wrapper";
+import { MetricsCard, MetricsGrid } from "@/components/ui/metrics-card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  campaignTableData,
+  conversionData,
+  metricsCards,
+  performanceMetrics,
+  revenueChartData,
+  userChartData,
+} from "@/lib/mock-data";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing
-            {" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <DashboardLayout>
+      <DashboardContainer>
+        {/* Page Header */}
+        <PageHeader
+          title="Dashboard Overview"
+          description="Monitor your marketing performance and key metrics in real-time"
+        >
+          <div className="flex items-center space-x-2">
+            <Select defaultValue="30d">
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7d">Last 7 days</SelectItem>
+                <SelectItem value="30d">Last 30 days</SelectItem>
+                <SelectItem value="90d">Last 90 days</SelectItem>
+                <SelectItem value="1y">Last year</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" size="sm">
+              <Calendar className="h-4 w-4 mr-2" />
+              Custom Range
+            </Button>
+            <Button variant="outline" size="sm">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+            <Button size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+          </div>
+        </PageHeader>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        {/* Key Metrics Cards */}
+        <DashboardSection title="Key Metrics" description="Overview of your most important performance indicators">
+          <MetricsGrid>
+            {metricsCards.map(metric => (
+              <MetricsCard
+                key={metric.id}
+                title={metric.title}
+                value={metric.value}
+                change={metric.change}
+                changeType={metric.changeType}
+                icon={metric.icon}
+                description={metric.description}
+              />
+            ))}
+          </MetricsGrid>
+        </DashboardSection>
+
+        {/* Charts Section */}
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Revenue Chart */}
+          <ChartWrapper
+            title="Revenue Trend"
+            description="Daily revenue over the last 30 days"
+            actions={(
+              <Select defaultValue="revenue">
+                <SelectTrigger className="w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="revenue">Revenue</SelectItem>
+                  <SelectItem value="profit">Profit</SelectItem>
+                  <SelectItem value="expenses">Expenses</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <LineChart
+              data={revenueChartData}
+              dataKey="revenue"
+              color="#8884d8"
+              showArea={true}
+              height={300}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </ChartWrapper>
+
+          {/* User Analytics Chart */}
+          <ChartWrapper
+            title="User Analytics"
+            description="New vs returning users over time"
           >
-            Read our docs
-          </a>
+            <MultiLineChart
+              data={userChartData}
+              lines={[
+                { dataKey: "newUsers", color: "#82ca9d", name: "New Users" },
+                { dataKey: "returningUsers", color: "#ffc658", name: "Returning Users" },
+              ]}
+              height={300}
+            />
+          </ChartWrapper>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        {/* Performance and Conversion Charts */}
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Conversion by Channel */}
+          <ChartWrapper
+            title="Conversions by Channel"
+            description="Distribution of conversions across marketing channels"
+          >
+            <DonutChart
+              data={conversionData}
+              dataKey="conversions"
+              nameKey="channel"
+              height={300}
+            />
+          </ChartWrapper>
+
+          {/* Performance Metrics */}
+          <ChartWrapper
+            title="Performance Metrics"
+            description="Key performance indicators over time"
+            actions={(
+              <Select defaultValue="ctr">
+                <SelectTrigger className="w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ctr">CTR</SelectItem>
+                  <SelectItem value="conversionRate">Conv. Rate</SelectItem>
+                  <SelectItem value="roas">ROAS</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          >
+            <BarChart
+              data={performanceMetrics.ctr}
+              dataKey="value"
+              color="#6366f1"
+              colors={[
+                "#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#00ff00",
+                "#8dd1e1", "#d084d0", "#ffb347", "#87ceeb", "#dda0dd",
+                "#98fb98", "#f0e68c", "#ff6347", "#40e0d0", "#ee82ee",
+                "#90ee90", "#ffd700", "#ff69b4", "#00ced1", "#ffa500",
+                "#9370db", "#32cd32", "#ff1493", "#00bfff", "#ff4500",
+                "#adff2f", "#da70d6", "#00fa9a", "#dc143c", "#00ffff"
+              ]}
+              height={300}
+            />
+          </ChartWrapper>
+        </div>
+
+        {/* Campaign Performance Table */}
+        <DashboardSection
+          title="Campaign Performance"
+          description="Detailed performance metrics for all active campaigns"
+          actions={(
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
+              <Button size="sm">
+                Create Campaign
+              </Button>
+            </div>
+          )}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <CampaignsTable data={campaignTableData} />
+        </DashboardSection>
+      </DashboardContainer>
+    </DashboardLayout>
   );
 }
