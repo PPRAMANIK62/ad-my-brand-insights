@@ -1,6 +1,7 @@
 "use client";
 
-import { Calendar, Download, RefreshCw } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Download, RefreshCw } from "lucide-react";
 
 import { BarChart } from "@/components/charts/bar-chart";
 import { LineChart, MultiLineChart } from "@/components/charts/line-chart";
@@ -10,6 +11,7 @@ import { PageHeader } from "@/components/layout/header";
 import { CampaignsTable } from "@/components/tables/campaigns-table";
 import { Button } from "@/components/ui/button";
 import { ChartWrapper } from "@/components/ui/chart-wrapper";
+import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { MetricsCard, MetricsGrid } from "@/components/ui/metrics-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -20,18 +22,167 @@ import {
   revenueChartData,
   userChartData,
 } from "@/lib/mock-data";
+import type { DateRange } from "@/lib/types";
+import type { DateRange as ReactDayPickerDateRange } from "react-day-picker";
+import {
+  filterTimeSeriesData,
+  filterTableData,
+  getPresetDateRange,
+} from "@/lib/date-utils";
 
 export default function Home() {
+  // State for date filtering
+  const [selectedPreset, setSelectedPreset] = useState("30d");
+  const [customDateRange, setCustomDateRange] = useState<ReactDayPickerDateRange | undefined>();
+  const [isCustomRange, setIsCustomRange] = useState(false);
+
+  // State for chart selections
+  const [selectedRevenueMetric, setSelectedRevenueMetric] = useState("revenue");
+  const [selectedPerformanceMetric, setSelectedPerformanceMetric] = useState("ctr");
+
+  // Calculate current date range based on preset or custom selection
+  const currentDateRange = useMemo(() => {
+    if (isCustomRange && customDateRange?.from && customDateRange?.to) {
+      return {
+        from: customDateRange.from,
+        to: customDateRange.to,
+      } as DateRange;
+    }
+    return getPresetDateRange(selectedPreset);
+  }, [selectedPreset, customDateRange, isCustomRange]);
+
+  // Filter data based on current date range
+  const filteredRevenueData = useMemo(() =>
+    filterTimeSeriesData(revenueChartData, currentDateRange),
+    [currentDateRange]
+  );
+
+  const filteredUserData = useMemo(() =>
+    filterTimeSeriesData(userChartData, currentDateRange),
+    [currentDateRange]
+  );
+
+  const filteredCampaignData = useMemo(() =>
+    filterTableData(campaignTableData, currentDateRange, 'dateCreated'),
+    [currentDateRange]
+  );
+
+  // Note: conversionData doesn't have date field, so we'll use it as-is for now
+  const filteredConversionData = conversionData;
+
+  // Filter performance metrics data
+  const filteredPerformanceMetrics = useMemo(() => ({
+    ctr: filterTimeSeriesData(performanceMetrics.ctr, currentDateRange),
+    conversionRate: filterTimeSeriesData(performanceMetrics.conversionRate, currentDateRange),
+    roas: filterTimeSeriesData(performanceMetrics.roas, currentDateRange),
+  }), [currentDateRange]);
+
+  // Calculate updated metrics from filtered data
+  const updatedMetrics = useMemo(() => {
+    // Calculate revenue from filtered revenue data
+    const totalRevenue = filteredRevenueData.reduce((sum, item) => sum + (item.revenue || 0), 0);
+
+    // Calculate users from filtered user data
+    const totalUsers = filteredUserData.reduce((sum, item) => sum + (item.users || 0), 0);
+
+    // Calculate conversions from filtered campaign data
+    const totalConversions = filteredCampaignData.reduce((sum, item) => sum + (item.conversions || 0), 0);
+
+    // Calculate growth rate from revenue data
+    const firstRevenue = filteredRevenueData[0]?.revenue || 0;
+    const lastRevenue = filteredRevenueData[filteredRevenueData.length - 1]?.revenue || 0;
+    const growthRate = firstRevenue > 0 ? ((lastRevenue - firstRevenue) / firstRevenue) * 100 : 0;
+
+    // Calculate trend changes by comparing periods
+    const calculateTrendChange = (data: any[], valueKey: string) => {
+      if (data.length < 2) return 0;
+
+      const midPoint = Math.floor(data.length / 2);
+      const firstHalf = data.slice(0, midPoint);
+      const secondHalf = data.slice(midPoint);
+
+      const firstHalfAvg = firstHalf.reduce((sum, item) => sum + (item[valueKey] || 0), 0) / firstHalf.length;
+      const secondHalfAvg = secondHalf.reduce((sum, item) => sum + (item[valueKey] || 0), 0) / secondHalf.length;
+
+      return firstHalfAvg > 0 ? ((secondHalfAvg - firstHalfAvg) / firstHalfAvg) * 100 : 0;
+    };
+
+    // Calculate individual trend changes
+    const revenueChange = calculateTrendChange(filteredRevenueData, 'revenue');
+    const usersChange = calculateTrendChange(filteredUserData, 'users');
+    const conversionsChange = calculateTrendChange(filteredCampaignData, 'conversions');
+
+    return metricsCards.map(card => {
+      let change = 0;
+      let changeType: "increase" | "decrease" = "increase";
+
+      switch (card.id) {
+        case 'revenue':
+          change = revenueChange;
+          changeType = change >= 0 ? "increase" : "decrease";
+          return {
+            ...card,
+            value: `$${(totalRevenue / 1000).toFixed(1)}K`,
+            change: Number(Math.abs(change).toFixed(2)),
+            changeType
+          };
+        case 'users':
+          change = usersChange;
+          changeType = change >= 0 ? "increase" : "decrease";
+          return {
+            ...card,
+            value: `${(totalUsers / 1000).toFixed(1)}K`,
+            change: Number(Math.abs(change).toFixed(2)),
+            changeType
+          };
+        case 'conversions':
+          change = conversionsChange;
+          changeType = change >= 0 ? "increase" : "decrease";
+          return {
+            ...card,
+            value: totalConversions.toLocaleString(),
+            change: Number(Math.abs(change).toFixed(2)),
+            changeType
+          };
+        case 'growth':
+          changeType = growthRate >= 0 ? "increase" : "decrease";
+          return {
+            ...card,
+            value: `${growthRate.toFixed(2)}%`,
+            change: Number(Math.abs(growthRate).toFixed(2)),
+            changeType
+          };
+        default:
+          return card;
+      }
+    });
+  }, [filteredRevenueData, filteredUserData, filteredCampaignData]);
+
+  // Handle preset selection
+  const handlePresetChange = (preset: string) => {
+    setSelectedPreset(preset);
+    setIsCustomRange(false);
+    setCustomDateRange(undefined);
+  };
+
+  // Handle custom date range selection
+  const handleCustomDateChange = (dateRange: ReactDayPickerDateRange | undefined) => {
+    setCustomDateRange(dateRange);
+    if (dateRange?.from && dateRange?.to) {
+      setIsCustomRange(true);
+    }
+  };
+
   return (
     <DashboardLayout>
       <DashboardContainer>
         {/* Page Header */}
         <PageHeader
           title="Dashboard Overview"
-          description="Monitor your marketing performance and key metrics in real-time"
+          description={`Monitor your marketing performance and key metrics in real-time${isCustomRange ? ' (Custom Range)' : ` (${selectedPreset.toUpperCase()})`}`}
         >
           <div className="flex items-center space-x-2">
-            <Select defaultValue="30d">
+            <Select value={selectedPreset} onValueChange={handlePresetChange}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
@@ -42,10 +193,11 @@ export default function Home() {
                 <SelectItem value="1y">Last year</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm">
-              <Calendar className="h-4 w-4 mr-2" />
-              Custom Range
-            </Button>
+            <DateRangePicker
+              date={customDateRange}
+              onDateChange={handleCustomDateChange}
+              placeholder="Custom Range"
+            />
             <Button variant="outline" size="sm">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
@@ -60,7 +212,7 @@ export default function Home() {
         {/* Key Metrics Cards */}
         <DashboardSection title="Key Metrics" description="Overview of your most important performance indicators">
           <MetricsGrid>
-            {metricsCards.map(metric => (
+            {updatedMetrics.map(metric => (
               <MetricsCard
                 key={metric.id}
                 title={metric.title}
@@ -81,7 +233,7 @@ export default function Home() {
             title="Revenue Trend"
             description="Daily revenue over the last 30 days"
             actions={(
-              <Select defaultValue="revenue">
+              <Select value={selectedRevenueMetric} onValueChange={setSelectedRevenueMetric}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -94,7 +246,7 @@ export default function Home() {
             )}
           >
             <LineChart
-              data={revenueChartData}
+              data={filteredRevenueData}
               dataKey="revenue"
               color="#8884d8"
               showArea={true}
@@ -108,7 +260,7 @@ export default function Home() {
             description="New vs returning users over time"
           >
             <MultiLineChart
-              data={userChartData}
+              data={filteredUserData}
               lines={[
                 { dataKey: "newUsers", color: "#82ca9d", name: "New Users" },
                 { dataKey: "returningUsers", color: "#ffc658", name: "Returning Users" },
@@ -126,7 +278,7 @@ export default function Home() {
             description="Distribution of conversions across marketing channels"
           >
             <DonutChart
-              data={conversionData}
+              data={filteredConversionData}
               dataKey="conversions"
               nameKey="channel"
               height={300}
@@ -138,7 +290,7 @@ export default function Home() {
             title="Performance Metrics"
             description="Key performance indicators over time"
             actions={(
-              <Select defaultValue="ctr">
+              <Select value={selectedPerformanceMetric} onValueChange={setSelectedPerformanceMetric}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -151,7 +303,7 @@ export default function Home() {
             )}
           >
             <BarChart
-              data={performanceMetrics.ctr}
+              data={filteredPerformanceMetrics[selectedPerformanceMetric as keyof typeof filteredPerformanceMetrics]}
               dataKey="value"
               color="#6366f1"
               colors={[
@@ -183,7 +335,7 @@ export default function Home() {
             </div>
           )}
         >
-          <CampaignsTable data={campaignTableData} />
+          <CampaignsTable data={filteredCampaignData} />
         </DashboardSection>
       </DashboardContainer>
     </DashboardLayout>
