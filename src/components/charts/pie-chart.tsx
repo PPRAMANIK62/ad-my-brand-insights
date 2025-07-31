@@ -43,6 +43,15 @@ export function PieChart({
   innerRadius = 0,
   outerRadius = 80,
 }: PieChartProps) {
+  // Validate data
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+        No data available
+      </div>
+    );
+  }
+
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;

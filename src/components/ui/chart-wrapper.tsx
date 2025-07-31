@@ -13,7 +13,7 @@ type ChartWrapperProps = {
   className?: string;
   loading?: boolean;
   actions?: React.ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export function ChartWrapper({
   title,
@@ -22,6 +22,7 @@ export function ChartWrapper({
   className,
   loading = false,
   actions,
+  ...props
 }: ChartWrapperProps) {
   if (loading) {
     return (
@@ -48,6 +49,7 @@ export function ChartWrapper({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       className={className}
+      {...props}
     >
       <Card className="transition-all duration-200 hover:shadow-lg">
         <CardHeader>

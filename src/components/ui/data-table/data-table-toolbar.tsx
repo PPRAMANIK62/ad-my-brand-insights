@@ -1,5 +1,8 @@
-import { ChevronDown, Download, Eye, Search } from "lucide-react";
+import { ChevronDown, Eye, Search } from "lucide-react";
 
+import type { TableRow } from "@/lib/types";
+
+import { CampaignExportButton } from "@/components/export";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,6 +18,7 @@ type DataTableToolbarProps = {
   searchPlaceholder?: string;
   globalFilter: string;
   onGlobalFilterChange: (value: string) => void;
+  data?: TableRow[]; // Add data prop for export
 };
 
 export function DataTableToolbar({
@@ -23,6 +27,7 @@ export function DataTableToolbar({
   searchPlaceholder = "Search...",
   globalFilter,
   onGlobalFilterChange,
+  data,
 }: DataTableToolbarProps) {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 sm:space-x-2">
@@ -77,10 +82,13 @@ export function DataTableToolbar({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button variant="outline" size="sm">
-          <Download className="mr-2 h-4 w-4" />
-          Export
-        </Button>
+        {data && (
+          <CampaignExportButton
+            campaigns={data}
+            variant="outline"
+            size="sm"
+          />
+        )}
       </div>
     </div>
   );

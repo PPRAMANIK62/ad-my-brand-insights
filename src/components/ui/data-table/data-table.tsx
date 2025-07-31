@@ -83,6 +83,7 @@ export function DataTable<TData, TValue>({
         searchPlaceholder={searchPlaceholder}
         globalFilter={globalFilter}
         onGlobalFilterChange={setGlobalFilter}
+        data={data}
       />
 
       {/* Table */}

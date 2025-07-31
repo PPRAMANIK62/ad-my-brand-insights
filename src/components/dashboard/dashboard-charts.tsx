@@ -36,6 +36,7 @@ export function DashboardCharts({
         <ChartWrapper
           title="Revenue Trend"
           description={`Daily revenue over the selected period (${periodLabel})`}
+          data-chart="revenue"
           actions={(
             <Select value={selectedRevenueMetric} onValueChange={setSelectedRevenueMetric}>
               <SelectTrigger className="w-32">
@@ -50,9 +51,9 @@ export function DashboardCharts({
           )}
         >
           <LineChart
-            data={filteredRevenueData}
+            data={filteredRevenueData || []}
             dataKey="revenue"
-            color="#8884d8"
+            color="#3b82f6"
             showArea={true}
             height={300}
           />
@@ -62,12 +63,13 @@ export function DashboardCharts({
         <ChartWrapper
           title="User Analytics"
           description={`New vs returning users over the selected period (${periodLabel})`}
+          data-chart="users"
         >
           <MultiLineChart
-            data={filteredUserData}
+            data={filteredUserData || []}
             lines={[
-              { dataKey: "newUsers", color: "#82ca9d", name: "New Users" },
-              { dataKey: "returningUsers", color: "#ffc658", name: "Returning Users" },
+              { dataKey: "newUsers", color: "#10b981", name: "New Users" },
+              { dataKey: "returningUsers", color: "#f59e0b", name: "Returning Users" },
             ]}
             height={300}
           />
@@ -80,9 +82,10 @@ export function DashboardCharts({
         <ChartWrapper
           title="Conversions by Channel"
           description="Distribution of conversions across marketing channels"
+          data-chart="conversions"
         >
           <DonutChart
-            data={filteredConversionData}
+            data={filteredConversionData || []}
             dataKey="conversions"
             nameKey="channel"
             height={300}
@@ -93,6 +96,7 @@ export function DashboardCharts({
         <ChartWrapper
           title="Performance Metrics"
           description={`Key performance indicators over the selected period (${periodLabel})`}
+          data-chart="performance"
           actions={(
             <Select value={selectedPerformanceMetric} onValueChange={setSelectedPerformanceMetric}>
               <SelectTrigger className="w-32">
@@ -107,9 +111,9 @@ export function DashboardCharts({
           )}
         >
           <BarChart
-            data={filteredPerformanceMetrics[selectedPerformanceMetric as keyof typeof filteredPerformanceMetrics]}
+            data={filteredPerformanceMetrics?.[selectedPerformanceMetric as keyof typeof filteredPerformanceMetrics] || []}
             dataKey="value"
-            color="#6366f1"
+            color="#8b5cf6"
             colors={[
               "#8884d8",
               "#82ca9d",

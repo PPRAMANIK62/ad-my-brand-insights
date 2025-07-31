@@ -33,7 +33,7 @@ export function LineChart({
   data,
   dataKey,
   xAxisKey = "date",
-  color = "hsl(var(--primary))",
+  color = "#3b82f6",
   height = 300,
   className,
   showGrid = true,
@@ -42,6 +42,16 @@ export function LineChart({
   dot = false,
 }: LineChartProps) {
   const chartColors = useChartColors();
+
+  // Validate data
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+        No data available
+      </div>
+    );
+  }
+
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `$${(value / 1000000).toFixed(1)}M`;
@@ -148,6 +158,16 @@ export function MultiLineChart({
   showArea = false,
 }: MultiLineChartProps) {
   const chartColors = useChartColors();
+
+  // Validate data
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+        No data available
+      </div>
+    );
+  }
+
   const formatValue = (value: number) => {
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;

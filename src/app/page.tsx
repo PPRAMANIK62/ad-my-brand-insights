@@ -1,5 +1,7 @@
 "use client";
 
+import type { ExportData } from "@/hooks/use-export";
+
 import { DashboardCampaigns } from "@/components/dashboard/dashboard-campaigns";
 import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
 import { DashboardControls } from "@/components/dashboard/dashboard-controls";
@@ -37,6 +39,17 @@ export default function Home() {
     filteredCampaignData,
   );
 
+  // Prepare export data
+  const exportData: ExportData = {
+    metrics: updatedMetrics,
+    revenueData: filteredRevenueData,
+    userData: filteredUserData,
+    campaignData: filteredCampaignData,
+    conversionData: filteredConversionData,
+    performanceMetrics: filteredPerformanceMetrics,
+    dateRange: currentDateRange,
+  };
+
   return (
     <DashboardLayout>
       <DashboardContainer>
@@ -50,6 +63,7 @@ export default function Home() {
             customDateRange={customDateRange}
             onPresetChange={handlePresetChange}
             onCustomDateChange={handleCustomDateChange}
+            exportData={exportData}
           />
         </PageHeader>
 

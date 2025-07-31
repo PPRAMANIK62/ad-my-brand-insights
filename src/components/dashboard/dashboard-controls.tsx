@@ -1,7 +1,10 @@
 import type { DateRange as ReactDayPickerDateRange } from "react-day-picker";
 
-import { Download, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
+import type { ExportData } from "@/hooks/use-export";
+
+import { ExportButton } from "@/components/export";
 import { Button } from "@/components/ui/button";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,6 +14,7 @@ type DashboardControlsProps = {
   customDateRange: ReactDayPickerDateRange | undefined;
   onPresetChange: (preset: string) => void;
   onCustomDateChange: (dateRange: ReactDayPickerDateRange | undefined) => void;
+  exportData?: ExportData;
 };
 
 export function DashboardControls({
@@ -18,6 +22,7 @@ export function DashboardControls({
   customDateRange,
   onPresetChange,
   onCustomDateChange,
+  exportData,
 }: DashboardControlsProps) {
   return (
     <div className="flex items-center space-x-2">
@@ -41,10 +46,13 @@ export function DashboardControls({
         <RefreshCw className="h-4 w-4 mr-2" />
         Refresh
       </Button>
-      <Button size="sm">
-        <Download className="h-4 w-4 mr-2" />
-        Export
-      </Button>
+      {exportData && (
+        <ExportButton
+          data={exportData}
+          context="dashboard"
+          defaultFormat="pdf"
+        />
+      )}
     </div>
   );
 }
