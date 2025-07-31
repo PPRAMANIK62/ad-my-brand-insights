@@ -2,7 +2,7 @@
 
 import { Download } from "lucide-react";
 
-import type { ExportContext, ExportData } from "@/hooks/use-export";
+import type { ExportData } from "@/hooks/use-export";
 import type { DateRange, ExportConfig } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { ExportDialog } from "./export-dialog";
 
 type ExportButtonProps = {
   data: ExportData;
-  context?: ExportContext;
+  context?: "dashboard" | "campaigns" | "metrics";
   variant?: "default" | "outline" | "ghost";
   size?: "default" | "sm" | "lg";
   className?: string;

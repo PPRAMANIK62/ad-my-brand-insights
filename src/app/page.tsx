@@ -23,6 +23,15 @@ export default function Home() {
     handleCustomDateChange,
   } = useDateRange();
 
+  function toLocalDateRange(dateRange: any): import("@/lib/types").DateRange {
+    return {
+      from: dateRange.from ?? new Date(),
+      to: dateRange.to ?? dateRange.from ?? new Date(),
+    };
+  }
+
+  const safeDateRange = toLocalDateRange(currentDateRange);
+
   // Get filtered data using custom hook
   const {
     filteredRevenueData,
@@ -30,7 +39,7 @@ export default function Home() {
     filteredCampaignData,
     filteredConversionData,
     filteredPerformanceMetrics,
-  } = useDashboardData(selectedPreset, isCustomRange, currentDateRange);
+  } = useDashboardData(selectedPreset, isCustomRange, safeDateRange);
 
   // Calculate updated metrics using custom hook
   const updatedMetrics = useMetricsCalculation(
@@ -47,7 +56,7 @@ export default function Home() {
     campaignData: filteredCampaignData,
     conversionData: filteredConversionData,
     performanceMetrics: filteredPerformanceMetrics,
-    dateRange: currentDateRange,
+    dateRange: safeDateRange,
   };
 
   return (

@@ -1,4 +1,4 @@
-import type { DateRange as ReactDayPickerDateRange } from "react-day-picker";
+import type { DateRange } from "react-day-picker";
 
 import { RefreshCw } from "lucide-react";
 
@@ -11,9 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 type DashboardControlsProps = {
   selectedPreset: string;
-  customDateRange: ReactDayPickerDateRange | undefined;
+  customDateRange: DateRange | undefined;
   onPresetChange: (preset: string) => void;
-  onCustomDateChange: (dateRange: ReactDayPickerDateRange | undefined) => void;
+  onCustomDateChange: (dateRange: DateRange | undefined) => void;
   exportData?: ExportData;
 };
 

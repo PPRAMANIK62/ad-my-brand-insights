@@ -1,8 +1,6 @@
-import type { DateRange as ReactDayPickerDateRange } from "react-day-picker";
+import type { DateRange } from "react-day-picker";
 
 import { useMemo, useState } from "react";
-
-import type { DateRange } from "@/lib/types";
 
 import { getPresetDateRange } from "@/lib/date-utils";
 
@@ -12,7 +10,7 @@ import { getPresetDateRange } from "@/lib/date-utils";
 export function useDateRange() {
   // State for date filtering
   const [selectedPreset, setSelectedPreset] = useState("30d");
-  const [customDateRange, setCustomDateRange] = useState<ReactDayPickerDateRange | undefined>();
+  const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
   const [isCustomRange, setIsCustomRange] = useState(false);
 
   // Calculate current date range based on preset or custom selection
@@ -34,7 +32,7 @@ export function useDateRange() {
   };
 
   // Handle custom date range selection
-  const handleCustomDateChange = (dateRange: ReactDayPickerDateRange | undefined) => {
+  const handleCustomDateChange = (dateRange: DateRange | undefined) => {
     setCustomDateRange(dateRange);
     if (dateRange?.from && dateRange?.to) {
       setIsCustomRange(true);
