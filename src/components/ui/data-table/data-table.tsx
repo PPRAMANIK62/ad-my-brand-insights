@@ -13,6 +13,8 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+import type { TableRow as TableRowType } from "@/lib/types";
+
 import {
   Table,
   TableBody,
@@ -26,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
-type DataTableProps<TData, TValue> = {
+type DataTableProps<TData extends TableRowType, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey?: string;
@@ -34,7 +36,7 @@ type DataTableProps<TData, TValue> = {
   className?: string;
 };
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends TableRowType, TValue>({
   columns,
   data,
   searchKey,

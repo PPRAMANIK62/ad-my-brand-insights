@@ -1,5 +1,7 @@
 "use client";
 
+import type { HTMLMotionProps } from "framer-motion";
+
 import { motion } from "framer-motion";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +15,7 @@ type ChartWrapperProps = {
   className?: string;
   loading?: boolean;
   actions?: React.ReactNode;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & Omit<HTMLMotionProps<"div">, "ref">;
 
 export function ChartWrapper({
   title,
