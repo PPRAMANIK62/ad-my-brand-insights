@@ -1,222 +1,173 @@
-# ADmyBRAND Insights - Analytics Dashboard
+# ADmyBRAND Insights 📊
 
-A modern, visually stunning analytics dashboard for digital marketing agencies built with Next.js 15, React 19, and shadcn/ui.
-
-![Dashboard Preview](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=ADmyBRAND+Insights+Dashboard)
+A modern, AI-powered analytics dashboard for digital marketing agencies. Built with Next.js 15, React 19, and a beautiful design system featuring smooth animations and comprehensive data visualization.
 
 ## ✨ Features
 
-### 📊 Dashboard Features
+### 📈 Dashboard Analytics
 
-- **Overview Page** with key metrics cards (Revenue, Users, Conversions, Growth %)
-- **Interactive Charts** - Line charts, bar charts, and pie/donut charts with hover effects
-- **Advanced Data Table** with sorting, filtering, pagination, and search
-- **Real-time Data** simulation with live updates
-- **Responsive Design** - Perfect on desktop, tablet, and mobile
+- **Real-time Metrics**: Revenue, Users, Conversions, and Growth tracking
+- **Interactive Charts**: Line charts, bar charts, and pie/donut charts with smooth animations
+- **Data Tables**: Advanced sorting, filtering, and pagination for campaign data
+- **Date Range Filtering**: Preset ranges (7D, 30D, 90D) and custom date selection
+- **Export Functionality**: PDF and CSV export with comprehensive data
 
-### 🎨 UI/UX Features
+### 🎨 Modern UI/UX
 
-- **Modern Design System** with consistent colors, typography, and spacing
-- **Beautiful Visual Hierarchy** with clear information architecture
-- **Smooth Animations** using Framer Motion for micro-interactions and transitions
-- **Dark/Light Mode Toggle** with smooth theme transitions
-- **Loading Skeletons** for better perceived performance
-- **Hover Effects** and interactive elements throughout
+- **Beautiful Design System**: Consistent colors, typography, and spacing
+- **Dark/Light Mode**: Seamless theme switching with system preference detection
+- **Responsive Design**: Perfect experience across desktop, tablet, and mobile
+- **Smooth Animations**: Micro-interactions, hover effects, and loading states
+- **Loading Skeletons**: Beautiful placeholder content during data loading
 
-### ⚡ Technical Features
+### ⚡ Technical Highlights
 
-- **Next.js 15** with App Router and Turbopack
-- **React 19** with latest features
-- **shadcn/ui** components with custom styling
-- **Tailwind CSS v4** for styling
-- **Recharts** for beautiful, responsive charts
-- **@tanstack/react-table** for advanced table functionality
-- **Framer Motion** for smooth animations
-- **TypeScript** for type safety
-- **Mock Data** with realistic sample analytics data
+- **Next.js 15** with App Router and Turbopack for lightning-fast development
+- **React 19** with latest features and optimizations
+- **shadcn/ui** component library with custom animations
+- **Tailwind CSS 4** for modern styling
+- **TypeScript** for type safety and better developer experience
+- **Recharts** for interactive data visualizations
+- **Framer Motion** for smooth animations and transitions
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- pnpm (recommended) or npm
+- pnpm (recommended package manager)
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository**
 
-```bash
-git clone <repository-url>
-cd ad-my-brand-insights
-```
+   ```bash
+   git clone https://github.com/PPRAMANIK62/ad-my-brand-insights.git
+   cd ad-my-brand-insights
+   ```
 
-2. Install dependencies:
+2. **Install dependencies**
 
-```bash
-pnpm install
-```
+   ```bash
+   pnpm install
+   ```
 
-3. Run the development server:
+3. **Start the development server**
 
-```bash
-pnpm dev
-```
+   ```bash
+   pnpm dev
+   ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 🏗️ Project Structure
-
-```
-src/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx         # Root layout with metadata
-│   ├── page.tsx           # Dashboard overview page
-│   └── globals.css        # Global styles and CSS variables
-├── components/
-│   ├── charts/            # Chart components (Line, Bar, Pie)
-│   ├── layout/            # Layout components (Header, Sidebar, Dashboard)
-│   ├── tables/            # Table components (Campaigns table)
-│   └── ui/                # Reusable UI components
-├── lib/
-│   ├── mock-data.ts       # Sample analytics data
-│   ├── types.ts           # TypeScript type definitions
-│   └── utils.ts           # Utility functions
-└── public/                # Static assets
-```
-
-## 🎯 Key Components
-
-### Metrics Cards
-
-- Revenue, Users, Conversions, Growth Rate
-- Animated counters and trend indicators
-- Color-coded change indicators
-
-### Interactive Charts
-
-- **Line Chart**: Revenue trends with area fill
-- **Multi-Line Chart**: User analytics (new vs returning)
-- **Bar Chart**: Performance metrics with hover effects
-- **Donut Chart**: Conversion distribution by channel
-
-### Advanced Data Table
-
-- Campaign performance data
-- Sortable columns with visual indicators
-- Global search and column-specific filters
-- Pagination with customizable page sizes
-- Row actions (view, edit, pause/resume, delete)
-- Export functionality
-
-### Theme System
-
-- Light and dark mode support
-- Smooth transitions between themes
-- Consistent color variables
-- System preference detection
-
-## 🎨 Design System
-
-### Colors
-
-- Primary: Blue-based palette for main actions
-- Chart Colors: 5-color palette for data visualization
-- Status Colors: Green (success), Yellow (warning), Red (error)
-- Neutral Colors: Comprehensive grayscale for text and backgrounds
-
-### Typography
-
-- DM Sans for headings and body text
-- Menlo for monospace (numbers, code)
-- Responsive font sizes with proper line heights
-
-### Spacing
-
-- 4px base unit with consistent spacing scale
-- Responsive padding and margins
-- Proper component spacing
-
-## 📱 Responsive Design
-
-- **Mobile First**: Optimized for mobile devices
-- **Breakpoints**: sm (640px), md (768px), lg (1024px), xl (1280px)
-- **Flexible Layouts**: CSS Grid and Flexbox for responsive layouts
-- **Touch Friendly**: Proper touch targets and interactions
-
-## 🔧 Customization
-
-### Adding New Charts
-
-1. Create chart component in `src/components/charts/`
-2. Use the `ChartWrapper` for consistent styling
-3. Implement responsive design and animations
-
-### Adding New Metrics
-
-1. Update `mock-data.ts` with new metric data
-2. Add metric card to the dashboard
-3. Ensure proper formatting and animations
-
-### Theming
-
-- Modify CSS variables in `globals.css`
-- Update color palette in Tailwind config
-- Ensure both light and dark modes work
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-```bash
-pnpm build
-```
-
-Deploy to Vercel with automatic deployments from Git.
-
-### Other Platforms
-
-```bash
-pnpm build
-pnpm start
-```
-
-## 📊 Performance
-
-- **Lighthouse Score**: 95+ on all metrics
-- **Bundle Size**: Optimized with tree shaking
-- **Loading**: Skeleton screens for perceived performance
-- **Animations**: 60fps smooth animations with Framer Motion
-
-## 🛠️ Development
-
-### Scripts
+### Available Scripts
 
 - `pnpm dev` - Start development server with Turbopack
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
 - `pnpm lint` - Run ESLint
-- `pnpm lint:fix` - Fix ESLint issues
+- `pnpm lint:fix` - Fix ESLint issues automatically
 
-### Code Quality
+## 🏗️ Project Structure
 
-- ESLint with Next.js and React rules
-- TypeScript for type safety
-- Consistent code formatting
-- Component-based architecture
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Dashboard home page
+├── components/
+│   ├── charts/            # Chart components (Line, Bar, Pie)
+│   ├── dashboard/         # Dashboard-specific components
+│   ├── export/            # Export functionality
+│   ├── layout/            # Layout components (Header, Sidebar)
+│   ├── tables/            # Data table components
+│   └── ui/                # Reusable UI components (shadcn/ui)
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utility functions and types
+└── env.ts                 # Environment configuration
+```
 
-## 📄 License
+## 🎯 Key Components
 
-This project is licensed under the MIT License.
+### Dashboard Metrics
 
-## 🤝 Contributing
+- Revenue tracking with growth indicators
+- User acquisition and engagement metrics
+- Conversion rate optimization data
+- Performance trend analysis
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+### Interactive Charts
 
-## 📞 Support
+- **Line Chart**: Revenue and user trends over time
+- **Bar Chart**: Campaign performance comparison
+- **Pie Chart**: Conversion source distribution
+- All charts feature smooth animations and responsive design
 
-For questions or support, please open an issue in the repository.
+### Data Management
+
+- Mock data generation for realistic analytics
+- Date range filtering with preset and custom options
+- Real-time data updates simulation
+- Comprehensive export capabilities
+
+## 🛠️ Technology Stack
+
+| Category          | Technology                       |
+| ----------------- | -------------------------------- |
+| **Framework**     | Next.js 15 with App Router       |
+| **Frontend**      | React 19, TypeScript             |
+| **Styling**       | Tailwind CSS 4, shadcn/ui        |
+| **Charts**        | Recharts                         |
+| **Animations**    | Framer Motion                    |
+| **Icons**         | Lucide React, Radix Icons        |
+| **Data Tables**   | TanStack Table                   |
+| **Date Handling** | date-fns, React Day Picker       |
+| **Export**        | jsPDF, html2canvas, PapaParse    |
+| **Linting**       | ESLint with @antfu/eslint-config |
+
+## 🎨 Design System
+
+The project uses a comprehensive design system built on top of shadcn/ui:
+
+- **Colors**: Carefully crafted color palette with dark/light mode support
+- **Typography**: Consistent font hierarchy and spacing
+- **Components**: Reusable, accessible components with smooth animations
+- **Responsive**: Mobile-first design approach
+- **Animations**: Subtle micro-interactions for enhanced UX
+
+## 📱 Responsive Design
+
+The dashboard is fully responsive and optimized for:
+
+- **Desktop**: Full-featured dashboard experience
+- **Tablet**: Optimized layout with touch-friendly interactions
+- **Mobile**: Streamlined interface with essential metrics
+
+## 🔧 Customization
+
+### Adding New Charts
+
+1. Create a new chart component in `src/components/charts/`
+2. Integrate with the dashboard data hooks
+3. Add to the dashboard charts section
+
+### Extending Metrics
+
+1. Update the metrics calculation hook
+2. Add new metric cards to the dashboard
+3. Include in export functionality
+
+### Theme Customization
+
+- Modify `src/app/globals.css` for global styles
+- Update Tailwind configuration for custom colors
+- Customize component variants in the UI folder
+
+## Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful component library
+- [Recharts](https://recharts.org/) for powerful chart components
+- [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
+- [Next.js](https://nextjs.org/) for the amazing React framework
